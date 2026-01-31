@@ -2,7 +2,7 @@
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { projects, type Project } from "@/data/projects";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -17,7 +17,18 @@ const itemVariants = {
     visible: { opacity: 1, y: 0 },
 };
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+// Hook to detect touch device
+function useIsTouchDevice() {
+    const [isTouch, setIsTouch] = useState(false);
+
+    useEffect(() => {
+        setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    }, []);
+
+    return isTouch;
+}
+
+function ProjectCard({ project, index, isTouch }: { project: Project; index: number; isTouch: boolean }) {
     const cardRef = useRef<HTMLDivElement>(null);
     const x = useMotionValue(0);
     const y = useMotionValue(0);
@@ -29,7 +40,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-8deg", "8deg"]);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!cardRef.current) return;
+        if (isTouch || !cardRef.current) return;
         const rect = cardRef.current.getBoundingClientRect();
         const width = rect.width;
         const height = rect.height;
@@ -54,18 +65,18 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             variants={itemVariants}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            style={{
+            style={isTouch ? {} : {
                 rotateX,
                 rotateY,
                 transformStyle: "preserve-3d",
             }}
-            className={`bento-card glow-effect group cursor-pointer ${isLarge ? "span-2 row-2" : ""
+            className={`bento-card glow-effect group cursor-pointer ${isLarge ? "md:span-2 md:row-2" : ""
                 }`}
         >
-            <div style={{ transform: "translateZ(50px)" }} className="h-full flex flex-col">
+            <div style={isTouch ? {} : { transform: "translateZ(50px)" }} className="h-full flex flex-col">
                 {/* Category Badge */}
-                <div className="flex items-center justify-between mb-4">
-                    <span className="px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-medium uppercase tracking-wider">
+                <div className="flex items-center justify-between mb-3 md:mb-4">
+                    <span className="px-2.5 md:px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-medium uppercase tracking-wider">
                         {project.category}
                     </span>
                     <div className="flex gap-2">
@@ -98,27 +109,27 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                     </div>
                 </div>
 
-                {/* Number */}
-                <span className="text-6xl font-bold text-text/5 font-[--font-playfair] mb-2">
+                {/* Number - smaller on mobile */}
+                <span className="text-4xl md:text-6xl font-bold text-text/5 font-[--font-playfair] mb-1 md:mb-2">
                     0{index + 1}
                 </span>
 
                 {/* Title */}
-                <h3 className="text-xl md:text-2xl font-bold text-text mb-3 group-hover:text-accent transition-colors font-[--font-playfair]">
+                <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-text mb-2 md:mb-3 group-hover:text-accent transition-colors font-[--font-playfair]">
                     {project.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-text-muted text-sm leading-relaxed mb-4 flex-1">
+                <p className="text-text-muted text-xs md:text-sm leading-relaxed mb-3 md:mb-4 flex-1 line-clamp-3 md:line-clamp-none">
                     {isLarge ? project.longDescription || project.description : project.description}
                 </p>
 
                 {/* Tech Stack */}
-                <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-border">
+                <div className="flex flex-wrap gap-1.5 md:gap-2 mt-auto pt-3 md:pt-4 border-t border-border">
                     {project.tech.slice(0, isLarge ? 6 : 3).map((tech) => (
                         <span
                             key={tech}
-                            className="px-2 py-1 rounded-md bg-surface-alt text-xs text-text-muted"
+                            className="px-2 py-0.5 md:py-1 rounded-md bg-surface-alt text-xs text-text-muted"
                         >
                             {tech}
                         </span>
@@ -131,24 +142,25 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
 export default function FeaturedProjects() {
     const featuredProjects = projects.filter((p) => p.featured);
+    const isTouch = useIsTouchDevice();
 
     return (
-        <section id="projects" className="relative bg-surface-alt/50">
-            <div className="container mx-auto px-6">
+        <section id="projects" className="relative bg-surface-alt/50 py-16 md:py-0">
+            <div className="container mx-auto px-4 sm:px-6">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
+                    viewport={{ once: true, margin: "-50px" }}
                     variants={containerVariants}
-                    className="space-y-12"
+                    className="space-y-8 md:space-y-12"
                 >
                     {/* Section Header */}
-                    <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6">
                         <div className="max-w-2xl">
-                            <p className="text-accent font-medium mb-4 uppercase tracking-wider text-sm">
+                            <p className="text-accent font-medium mb-2 md:mb-4 uppercase tracking-wider text-xs md:text-sm">
                                 Selected Work
                             </p>
-                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-[--font-playfair] leading-tight">
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-[--font-playfair] leading-tight">
                                 Projects that{" "}
                                 <span className="gradient-text">showcase</span> my craft
                             </h2>
@@ -168,10 +180,10 @@ export default function FeaturedProjects() {
                         </a>
                     </motion.div>
 
-                    {/* Projects Grid */}
-                    <div className="bento-grid">
+                    {/* Projects Grid - simpler on mobile */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                         {featuredProjects.map((project, index) => (
-                            <ProjectCard key={project.id} project={project} index={index} />
+                            <ProjectCard key={project.id} project={project} index={index} isTouch={isTouch} />
                         ))}
                     </div>
                 </motion.div>

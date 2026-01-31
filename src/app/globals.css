@@ -430,3 +430,118 @@ section {
     transform: scale(1.2);
   }
 }
+
+/* ================================
+   MOBILE OPTIMIZATIONS
+   ================================ */
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .marquee-content {
+    animation: none;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+
+  /* Disable hover effects on touch devices */
+  .bento-card:hover {
+    transform: none;
+  }
+
+  .magnetic-btn:hover::before {
+    transform: translateY(100%);
+  }
+
+  /* Make touch targets larger */
+  .magnetic-btn {
+    padding: 0.875rem 2rem;
+    min-height: 48px;
+  }
+
+  /* Remove 3D effects */
+  [style*="translateZ"] {
+    transform: none !important;
+  }
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+
+  /* Smaller section spacing */
+  section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  /* Smaller bento cards */
+  .bento-card {
+    padding: 1.25rem;
+    border-radius: 1rem;
+  }
+
+  /* Smaller magnetic buttons */
+  .magnetic-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+  }
+
+  /* Smaller display text */
+  .display-text {
+    font-size: clamp(2rem, 12vw, 4rem);
+  }
+
+  /* Thinner outline text on mobile */
+  .outline-text {
+    -webkit-text-stroke: 1px var(--text);
+  }
+
+  /* Hide noise overlay on mobile for performance */
+  .noise-overlay {
+    display: none;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .bento-card {
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .magnetic-btn {
+    padding: 0.625rem 1.25rem;
+    width: 100%;
+  }
+}
+
+/* Line clamp utility for mobile */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Safe area insets for notched devices */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .container {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  footer {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

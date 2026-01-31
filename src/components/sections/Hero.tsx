@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
+import { useState, useEffect } from "react";
 
 const Scene3D = dynamic(() => import("@/components/three/Scene3D"), {
     ssr: false,
@@ -11,8 +12,46 @@ const AvatarModel = dynamic(
     { ssr: false }
 );
 
-// Animated letter component with hover effects
-function AnimatedLetter({ char, index, delay }: { char: string; index: number; delay: number }) {
+// Hook to detect mobile
+function useIsMobile() {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    return isMobile;
+}
+
+// Simplified animated letter for mobile (no hover effects)
+function AnimatedLetter({ char, index, delay, isMobile }: { char: string; index: number; delay: number; isMobile: boolean }) {
+    if (isMobile) {
+        // Simpler animation for mobile - no hover effects
+        return (
+            <motion.span
+                className="inline-block"
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{
+                    duration: 0.4,
+                    delay: delay + index * 0.02,
+                    ease: "easeOut"
+                }}
+                style={{
+                    WebkitTextStroke: "1.5px var(--text)",
+                    WebkitTextFillColor: "transparent",
+                }}
+            >
+                {char}
+            </motion.span>
+        );
+    }
+
     return (
         <motion.span
             className="inline-block cursor-pointer transition-all duration-200"
@@ -42,14 +81,14 @@ function AnimatedLetter({ char, index, delay }: { char: string; index: number; d
 }
 
 // Name row component
-function AnimatedName({ name, baseDelay }: { name: string; baseDelay: number }) {
+function AnimatedName({ name, baseDelay, isMobile }: { name: string; baseDelay: number; isMobile: boolean }) {
     return (
         <div className="overflow-hidden">
             <motion.h1
-                className="text-[2.5rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[5.5rem] xl:text-[6.5rem] font-black leading-[0.95] tracking-[-0.03em] flex flex-wrap"
+                className="text-[2.2rem] sm:text-[3rem] md:text-[4.5rem] lg:text-[5.5rem] xl:text-[6.5rem] font-black leading-[0.95] tracking-[-0.03em] flex flex-wrap"
             >
                 {name.split("").map((char, i) => (
-                    <AnimatedLetter key={i} char={char} index={i} delay={baseDelay} />
+                    <AnimatedLetter key={i} char={char} index={i} delay={baseDelay} isMobile={isMobile} />
                 ))}
             </motion.h1>
         </div>
@@ -57,65 +96,77 @@ function AnimatedName({ name, baseDelay }: { name: string; baseDelay: number }) 
 }
 
 export default function Hero() {
+    const isMobile = useIsMobile();
+
     return (
         <section
             id="home"
-            className="relative h-screen flex items-center"
+            className="relative min-h-screen flex items-center py-20 md:py-0"
         >
-            {/* 3D Avatar Background */}
-            <div className="absolute right-0 top-[15%] w-[450px] h-[75vh] md:w-[550px] lg:w-[650px] xl:w-[700px]">
-                <Scene3D className="opacity-95">
-                    <AvatarModel />
-                </Scene3D>
-            </div>
+            {/* 3D Avatar - Hidden on mobile for performance, adjusted for tablet */}
+            {!isMobile && (
+                <div className="absolute right-0 top-[15%] w-[350px] h-[60vh] md:w-[450px] md:h-[70vh] lg:w-[550px] lg:h-[75vh] xl:w-[650px]">
+                    <Scene3D className="opacity-90">
+                        <AvatarModel />
+                    </Scene3D>
+                </div>
+            )}
 
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-transparent z-[1] pointer-events-none" />
+            {/* Mobile-only decorative gradient */}
+            {isMobile && (
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute -top-20 -right-20 w-72 h-72 bg-accent/20 rounded-full blur-3xl" />
+                    <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-purple-500/15 rounded-full blur-3xl" />
+                </div>
+            )}
+
+            {/* Gradient Overlay - adjusted for mobile */}
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 md:via-background/85 to-background md:to-transparent z-[1] pointer-events-none" />
 
             {/* Content */}
-            <div className="container relative z-10 px-6 mx-auto">
-                <div className="max-w-3xl space-y-5">
-                    {/* GIANT Interactive Name - All Outline Style */}
+            <div className="container relative z-10 px-4 sm:px-6 mx-auto">
+                <div className="max-w-3xl space-y-4 md:space-y-5">
+                    {/* GIANT Interactive Name */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.3 }}
                         className="space-y-0"
                     >
-                        <AnimatedName name="SREYANSU" baseDelay={0.2} />
-                        <AnimatedName name="SEKHAR" baseDelay={0.4} />
-                        <AnimatedName name="MOHANTY" baseDelay={0.6} />
+                        <AnimatedName name="SREYANSU" baseDelay={0.2} isMobile={isMobile} />
+                        <AnimatedName name="SEKHAR" baseDelay={isMobile ? 0.3 : 0.4} isMobile={isMobile} />
+                        <AnimatedName name="MOHANTY" baseDelay={isMobile ? 0.4 : 0.6} isMobile={isMobile} />
                     </motion.div>
 
                     {/* Role & Description */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 1.0 }}
+                        transition={{ duration: 0.5, delay: isMobile ? 0.6 : 1.0 }}
                         className="max-w-lg space-y-3 pt-2"
                     >
-                        <div className="flex items-center gap-3 text-base md:text-lg">
-                            <span className="w-10 h-[2px] bg-accent" />
+                        <div className="flex flex-wrap items-center gap-2 md:gap-3 text-sm md:text-lg">
+                            <span className="w-6 md:w-10 h-[2px] bg-accent" />
                             <span className="font-semibold text-text">Full Stack Developer</span>
-                            <span className="w-2 h-2 rounded-full bg-accent" />
+                            <span className="w-1.5 md:w-2 h-1.5 md:h-2 rounded-full bg-accent" />
                             <span className="font-semibold text-text">AI Enthusiast</span>
                         </div>
-                        <p className="text-text-muted leading-relaxed text-base md:text-lg">
+                        <p className="text-text-muted leading-relaxed text-sm md:text-lg">
                             Building <span className="text-accent font-semibold">production-grade</span> web
                             applications. Turning complex ideas into{" "}
                             <span className="text-accent font-semibold">real, working systems</span>.
                         </p>
                     </motion.div>
 
-                    {/* CTAs */}
+                    {/* CTAs - Stack on mobile */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 1.1 }}
-                        className="flex flex-wrap items-center gap-3 pt-2"
+                        transition={{ duration: 0.5, delay: isMobile ? 0.7 : 1.1 }}
+                        className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2"
                     >
-                        <a href="#projects" className="magnetic-btn group">
-                            <span className="flex items-center gap-2">
+                        <a href="#projects" className="magnetic-btn group text-center">
+                            <span className="flex items-center justify-center gap-2">
                                 View My Work
                                 <svg
                                     className="w-4 h-4 transition-transform group-hover:translate-x-1"
@@ -134,44 +185,20 @@ export default function Hero() {
                         </a>
                         <a
                             href="#contact"
-                            className="px-6 py-3 rounded-full border-2 border-text/20 text-text hover:border-accent hover:text-accent transition-all font-semibold text-sm md:text-base"
+                            className="px-6 py-3 rounded-full border-2 border-text/20 text-text hover:border-accent hover:text-accent transition-all font-semibold text-sm md:text-base text-center"
                         >
                             Let&apos;s Talk
                         </a>
                     </motion.div>
-
-                    {/* Stats Row */}
-                    {/* <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 1.2 }}
-                        className="flex flex-wrap gap-10 pt-6 border-t border-border/30"
-                    >
-                        {[
-                            { number: "10+", label: "Projects" },
-                            { number: "2+", label: "Internships" },
-                        ].map((stat, i) => (
-                            <motion.div
-                                key={i}
-                                className="space-y-0.5"
-                                whileHover={{ scale: 1.05 }}
-                            >
-                                <p className="text-3xl md:text-4xl font-black text-accent">{stat.number}</p>
-                                <p className="text-xs text-text-muted uppercase tracking-wider font-medium">
-                                    {stat.label}
-                                </p>
-                            </motion.div>
-                        ))}
-                    </motion.div> */}
                 </div>
             </div>
 
-            {/* Scroll Indicator */}
+            {/* Scroll Indicator - Hidden on very small screens */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 1.5 }}
-                className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20"
+                transition={{ duration: 0.6, delay: isMobile ? 1 : 1.5 }}
+                className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 hidden sm:block"
             >
                 <motion.div
                     animate={{ y: [0, 8, 0] }}
@@ -181,7 +208,7 @@ export default function Hero() {
                     <span className="text-xs text-text-muted uppercase tracking-widest font-medium">
                         Scroll
                     </span>
-                    <div className="w-[2px] h-12 bg-gradient-to-b from-accent to-transparent" />
+                    <div className="w-[2px] h-10 md:h-12 bg-gradient-to-b from-accent to-transparent" />
                 </motion.div>
             </motion.div>
         </section>

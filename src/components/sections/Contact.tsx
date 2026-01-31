@@ -110,9 +110,9 @@ export default function Contact() {
     };
 
     return (
-        <section id="contact" className="relative min-h-screen py-32 overflow-hidden">
-            {/* Animated background grid */}
-            <div className="absolute inset-0 opacity-[0.02]">
+        <section id="contact" className="relative min-h-screen py-16 md:py-32 overflow-hidden">
+            {/* Animated background grid - hidden on mobile for performance */}
+            <div className="absolute inset-0 opacity-[0.02] hidden md:block">
                 <div className="absolute inset-0" style={{
                     backgroundImage: `
                         linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
@@ -122,50 +122,38 @@ export default function Contact() {
                 }} />
             </div>
 
-            {/* Floating orbs */}
-            <motion.div
-                className="absolute top-20 left-[10%] w-96 h-96 rounded-full"
+            {/* Floating orbs - smaller on mobile, simplified animation */}
+            <div className="absolute top-10 md:top-20 left-[5%] md:left-[10%] w-48 md:w-96 h-48 md:h-96 rounded-full opacity-50 md:opacity-100"
                 style={{ background: 'radial-gradient(circle, rgba(217,70,239,0.15) 0%, transparent 70%)' }}
-                animate={{
-                    y: [0, -30, 0],
-                    scale: [1, 1.1, 1],
-                }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />
-            <motion.div
-                className="absolute bottom-20 right-[10%] w-80 h-80 rounded-full"
+            <div className="absolute bottom-10 md:bottom-20 right-[5%] md:right-[10%] w-40 md:w-80 h-40 md:h-80 rounded-full opacity-50 md:opacity-100"
                 style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)' }}
-                animate={{
-                    y: [0, 20, 0],
-                    scale: [1, 0.9, 1],
-                }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             />
 
-            <div className="container mx-auto px-6 relative z-10">
+            <div className="container mx-auto px-4 sm:px-6 relative z-10">
                 {/* Creative Header */}
                 <motion.div
-                    initial={{ opacity: 0, y: 40 }}
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center mb-20"
+                    className="text-center mb-10 md:mb-20"
                 >
                     <motion.div
-                        className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-accent/10 border border-accent/20 mb-8"
+                        className="inline-flex items-center gap-2 md:gap-3 px-4 md:px-5 py-2 md:py-2.5 rounded-full bg-accent/10 border border-accent/20 mb-6 md:mb-8"
                         initial={{ scale: 0.9 }}
                         whileInView={{ scale: 1 }}
                         viewport={{ once: true }}
                     >
-                        <span className="relative flex h-2.5 w-2.5">
+                        <span className="relative flex h-2 w-2 md:h-2.5 md:w-2.5">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-green-500"></span>
                         </span>
-                        <span className="text-sm font-medium text-accent">Available for new projects</span>
+                        <span className="text-xs md:text-sm font-medium text-accent">Available for new projects</span>
                     </motion.div>
 
-                    <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-black leading-[0.9] tracking-tight mb-6">
+                    <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-[5.5rem] font-black leading-[0.95] md:leading-[0.9] tracking-tight mb-4 md:mb-6">
                         <span className="block text-text">Let&apos;s create</span>
-                        <span className="block mt-2">
+                        <span className="block mt-1 md:mt-2">
                             <span className="relative">
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-purple-400 to-pink-400">
                                     something
@@ -175,14 +163,14 @@ export default function Contact() {
                             <span className="text-text/20">extraordinary</span>
                         </span>
                     </h2>
-                    <p className="text-text-muted text-lg max-w-md mx-auto">
+                    <p className="text-text-muted text-sm md:text-lg max-w-md mx-auto px-4">
                         Got an idea brewing? Let&apos;s turn it into reality together.
                     </p>
                 </motion.div>
 
-                {/* Main Content - Asymmetric Layout */}
+                {/* Main Content - Stack on mobile */}
                 <div className="max-w-6xl mx-auto">
-                    <div className="grid lg:grid-cols-12 gap-8 lg:gap-4">
+                    <div className="grid lg:grid-cols-12 gap-6 md:gap-8 lg:gap-4">
 
                         {/* Left Column - Contact Info */}
                         <motion.div
@@ -209,7 +197,7 @@ export default function Contact() {
                                     </svg>
                                 </div>
                                 <p className="text-xs uppercase tracking-widest text-text-muted mb-2">Drop a line</p>
-                                <p className="text-xl font-semibold text-text group-hover:text-accent transition-colors break-all">
+                                <p className="text-base md:text-xl font-semibold text-text group-hover:text-accent transition-colors break-all">
                                     sreyansu90@gmail.com
                                 </p>
                             </motion.a>
@@ -254,15 +242,15 @@ export default function Contact() {
                         >
                             <form
                                 onSubmit={handleSubmit}
-                                className="relative p-8 lg:p-10 rounded-[2.5rem] bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-xl border border-white/10"
+                                className="relative p-5 sm:p-8 lg:p-10 rounded-2xl md:rounded-[2.5rem] bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-xl border border-white/10"
                             >
-                                {/* Decorative corner */}
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-accent/20 to-transparent rounded-tr-[2.5rem] rounded-bl-[4rem] opacity-50" />
+                                {/* Decorative corner - hidden on mobile */}
+                                <div className="absolute top-0 right-0 w-24 md:w-32 h-24 md:h-32 bg-gradient-to-br from-accent/20 to-transparent rounded-tr-2xl md:rounded-tr-[2.5rem] rounded-bl-[3rem] md:rounded-bl-[4rem] opacity-50 hidden sm:block" />
 
                                 <div className="relative space-y-6">
                                     {/* Name */}
                                     <div className="group">
-                                        <label className="block text-xs uppercase tracking-widest text-text-muted mb-3 group-focus-within:text-accent transition-colors">
+                                        <label className="block text-xs uppercase tracking-widest text-text-muted mb-2 md:mb-3 group-focus-within:text-accent transition-colors">
                                             What&apos;s your name?
                                         </label>
                                         <input
@@ -271,7 +259,7 @@ export default function Contact() {
                                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                             onFocus={() => setFocusedField('name')}
                                             onBlur={() => setFocusedField(null)}
-                                            className="w-full px-0 py-4 bg-transparent border-b-2 border-white/10 focus:border-accent outline-none transition-colors text-xl font-medium text-text placeholder:text-text-muted/50"
+                                            className="w-full px-0 py-3 md:py-4 bg-transparent border-b-2 border-white/10 focus:border-accent outline-none transition-colors text-base md:text-xl font-medium text-text placeholder:text-text-muted/50"
                                             placeholder="John Doe"
                                             required
                                         />
@@ -279,7 +267,7 @@ export default function Contact() {
 
                                     {/* Email */}
                                     <div className="group">
-                                        <label className="block text-xs uppercase tracking-widest text-text-muted mb-3 group-focus-within:text-accent transition-colors">
+                                        <label className="block text-xs uppercase tracking-widest text-text-muted mb-2 md:mb-3 group-focus-within:text-accent transition-colors">
                                             Your email address
                                         </label>
                                         <input
@@ -288,7 +276,7 @@ export default function Contact() {
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                             onFocus={() => setFocusedField('email')}
                                             onBlur={() => setFocusedField(null)}
-                                            className="w-full px-0 py-4 bg-transparent border-b-2 border-white/10 focus:border-accent outline-none transition-colors text-xl font-medium text-text placeholder:text-text-muted/50"
+                                            className="w-full px-0 py-3 md:py-4 bg-transparent border-b-2 border-white/10 focus:border-accent outline-none transition-colors text-base md:text-xl font-medium text-text placeholder:text-text-muted/50"
                                             placeholder="john@company.com"
                                             required
                                         />
@@ -296,16 +284,16 @@ export default function Contact() {
 
                                     {/* Message */}
                                     <div className="group">
-                                        <label className="block text-xs uppercase tracking-widest text-text-muted mb-3 group-focus-within:text-accent transition-colors">
+                                        <label className="block text-xs uppercase tracking-widest text-text-muted mb-2 md:mb-3 group-focus-within:text-accent transition-colors">
                                             Tell me about your project
                                         </label>
                                         <textarea
-                                            rows={4}
+                                            rows={3}
                                             value={formData.message}
                                             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                             onFocus={() => setFocusedField('message')}
                                             onBlur={() => setFocusedField(null)}
-                                            className="w-full px-0 py-4 bg-transparent border-b-2 border-white/10 focus:border-accent outline-none transition-colors text-xl font-medium text-text placeholder:text-text-muted/50 resize-none"
+                                            className="w-full px-0 py-3 md:py-4 bg-transparent border-b-2 border-white/10 focus:border-accent outline-none transition-colors text-base md:text-xl font-medium text-text placeholder:text-text-muted/50 resize-none"
                                             placeholder="I'd love to work on..."
                                             required
                                         />
@@ -317,7 +305,7 @@ export default function Contact() {
                                         disabled={isSubmitting}
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        className="group relative w-full mt-8 py-5 px-8 rounded-2xl bg-accent text-white font-bold text-lg overflow-hidden transition-all disabled:opacity-70"
+                                        className="group relative w-full mt-6 md:mt-8 py-4 md:py-5 px-6 md:px-8 rounded-xl md:rounded-2xl bg-accent text-white font-bold text-base md:text-lg overflow-hidden transition-all disabled:opacity-70"
                                     >
                                         {/* Shine effect */}
                                         <motion.div

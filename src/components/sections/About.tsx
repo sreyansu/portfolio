@@ -17,32 +17,32 @@ const itemVariants = {
     visible: { opacity: 1, y: 0 },
 };
 
-// Skill badge component with icon and brand color
+// Skill badge component with icon and brand color - optimized for mobile
 function SkillBadge({ name, icon: Icon, color }: { name: string; icon?: IconType; color?: string }) {
     return (
         <span
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border transition-all hover:scale-105 cursor-default bg-surface-alt border-border hover:border-current group"
+            className="inline-flex items-center gap-1.5 md:gap-2 px-2.5 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium border transition-all md:hover:scale-105 cursor-default bg-surface-alt border-border md:hover:border-current group"
             style={{
                 '--brand-color': color || 'var(--accent)',
             } as React.CSSProperties}
         >
             {Icon && (
                 <Icon
-                    className="w-4 h-4 transition-colors"
+                    className="w-3 h-3 md:w-4 md:h-4 transition-colors flex-shrink-0"
                     style={{ color: color || 'currentColor' }}
                 />
             )}
-            <span className="text-text-muted group-hover:text-text transition-colors">{name}</span>
+            <span className="text-text-muted group-hover:text-text transition-colors whitespace-nowrap">{name}</span>
         </span>
     );
 }
 
-// Animated marquee component with hover interactivity
+// Animated marquee component - touch-friendly
 function Marquee({ children, speed = 30 }: { children: React.ReactNode; speed?: number }) {
     return (
         <div className="flex overflow-hidden group">
             <motion.div
-                className="flex gap-8 flex-shrink-0 group-hover:[animation-play-state:paused]"
+                className="flex gap-4 md:gap-8 flex-shrink-0 md:group-hover:[animation-play-state:paused]"
                 animate={{ x: "-50%" }}
                 transition={{
                     x: {
@@ -60,43 +60,38 @@ function Marquee({ children, speed = 30 }: { children: React.ReactNode; speed?: 
     );
 }
 
-// Interactive concept item for marquee
+// Interactive concept item for marquee - no hover effects on mobile
 function ConceptItem({ concept }: { concept: string }) {
     return (
-        <motion.span
-            className="text-3xl md:text-4xl lg:text-5xl font-black text-text/[0.07] whitespace-nowrap cursor-default transition-all duration-300 hover:text-accent/30 hover:scale-105"
-            whileHover={{
-                scale: 1.1,
-                color: "var(--accent)",
-                opacity: 0.5,
-            }}
+        <span
+            className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-black text-text/[0.07] whitespace-nowrap cursor-default"
         >
             {concept}
-        </motion.span>
+        </span>
     );
 }
 
 export default function About() {
     return (
-        <section id="about" className="relative overflow-hidden">
-            <div className="container mx-auto px-6">
+        <section id="about" className="relative overflow-hidden py-16 md:py-0">
+            <div className="container mx-auto px-4 sm:px-6">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
+                    viewport={{ once: true, margin: "-50px" }}
                     variants={containerVariants}
-                    className="space-y-16"
+                    className="space-y-10 md:space-y-16"
                 >
                     {/* Section Header */}
                     <motion.div variants={itemVariants} className="max-w-3xl">
-                        <p className="text-accent font-semibold mb-4 uppercase tracking-wider text-sm">
+                        <p className="text-accent font-semibold mb-2 md:mb-4 uppercase tracking-wider text-xs md:text-sm">
                             About Me
                         </p>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight">
                             Building{" "}
                             <span className="relative inline-block">
                                 digital
-                                <span className="absolute -bottom-2 left-0 w-full h-3 bg-accent/30 -skew-x-12 -z-10" />
+                                <span className="absolute -bottom-1 md:-bottom-2 left-0 w-full h-2 md:h-3 bg-accent/30 -skew-x-12 -z-10" />
                             </span>{" "}
                             experiences that{" "}
                             <span className="text-accent">matter</span>
@@ -104,14 +99,14 @@ export default function About() {
                     </motion.div>
 
                     {/* Main Content Grid */}
-                    <div className="grid lg:grid-cols-2 gap-12 items-start">
+                    <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
                         {/* Left - Bio */}
-                        <motion.div variants={itemVariants} className="space-y-6">
+                        <motion.div variants={itemVariants} className="space-y-4 md:space-y-6">
                             {/* Profile Card */}
-                            <div className="bento-card p-8 space-y-6">
-                                <div className="flex items-start gap-6">
+                            <div className="bento-card p-5 md:p-8 space-y-4 md:space-y-6">
+                                <div className="flex items-start gap-4 md:gap-6">
                                     {/* Avatar */}
-                                    <div className="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0 ring-2 ring-accent/30">
+                                    <div className="w-16 h-16 md:w-24 md:h-24 rounded-xl md:rounded-2xl overflow-hidden flex-shrink-0 ring-2 ring-accent/30">
                                         <img
                                             src="/image/Photo_SREYANSU_SEKHAR_MOHANTY_-_Copy-removebg-preview.png"
                                             alt="Sreyansu Sekhar Mohanty"
@@ -119,10 +114,10 @@ export default function About() {
                                         />
                                     </div>
                                     <div>
-                                        <h3 className="text-2xl font-bold text-text mb-1">
+                                        <h3 className="text-lg md:text-2xl font-bold text-text mb-0.5 md:mb-1">
                                             Sreyansu Sekhar Mohanty
                                         </h3>
-                                        <p className="text-accent font-medium">Full Stack Developer</p>
+                                        <p className="text-accent font-medium text-sm md:text-base">Full Stack Developer</p>
                                         <p className="text-text-muted text-sm mt-2">
                                             B.Tech CSE @ VSSUT Burla
                                         </p>

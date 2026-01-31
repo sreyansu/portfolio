@@ -14,28 +14,28 @@ const footerLinks = [
 export default function Footer() {
     return (
         <footer className="border-t border-border bg-background">
-            <div className="container mx-auto px-6 py-16">
+            <div className="container mx-auto px-4 sm:px-6 py-10 md:py-16">
                 {/* Big Name */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center mb-12"
+                    className="text-center mb-8 md:mb-12"
                 >
                     <Link href="#home">
-                        <h3 className="text-6xl md:text-8xl font-bold font-[--font-playfair] text-text/5 hover:text-accent/20 transition-colors">
+                        <h3 className="text-4xl sm:text-6xl md:text-8xl font-bold font-[--font-playfair] text-text/5 hover:text-accent/20 transition-colors">
                             SSM
                         </h3>
                     </Link>
                 </motion.div>
 
-                {/* Links */}
-                <div className="flex flex-wrap justify-center gap-8 mb-12">
+                {/* Links - Stack on very small screens */}
+                <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 mb-8 md:mb-12">
                     {footerLinks.map((link) => (
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-text-muted hover:text-accent transition-colors font-medium"
+                            className="text-sm md:text-base text-text-muted hover:text-accent transition-colors font-medium"
                         >
                             {link.name}
                         </Link>

@@ -18,28 +18,28 @@ const itemVariants = {
 
 export default function Experience() {
     return (
-        <section id="experience" className="relative">
-            <div className="container mx-auto px-6">
+        <section id="experience" className="relative py-16 md:py-0">
+            <div className="container mx-auto px-4 sm:px-6">
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
+                    viewport={{ once: true, margin: "-50px" }}
                     variants={containerVariants}
-                    className="space-y-16"
+                    className="space-y-10 md:space-y-16"
                 >
                     {/* Section Header */}
                     <motion.div variants={itemVariants} className="max-w-2xl">
-                        <p className="text-accent font-medium mb-4 uppercase tracking-wider text-sm">
+                        <p className="text-accent font-medium mb-2 md:mb-4 uppercase tracking-wider text-xs md:text-sm">
                             Experience
                         </p>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-[--font-playfair] leading-tight">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-[--font-playfair] leading-tight">
                             Where I&apos;ve{" "}
                             <span className="accent-underline">worked</span> &{" "}
                             <span className="gradient-text">learned</span>
                         </h2>
                     </motion.div>
 
-                    <div className="grid lg:grid-cols-5 gap-12">
+                    <div className="grid lg:grid-cols-5 gap-6 md:gap-12">
                         {/* Experience Timeline */}
                         <div className="lg:col-span-3 space-y-0">
                             {experiences.map((exp, index) => (
@@ -53,10 +53,10 @@ export default function Experience() {
                                         <div className="absolute left-[27px] top-[60px] w-[2px] h-[calc(100%-32px)] bg-gradient-to-b from-accent to-border" />
                                     )}
 
-                                    <div className="flex gap-6 pb-12">
+                                    <div className="flex gap-3 md:gap-6 pb-8 md:pb-12">
                                         {/* Timeline Marker */}
-                                        <div className="relative flex-shrink-0">
-                                            <div className="w-14 h-14 rounded-2xl bg-accent/10 border-2 border-accent flex items-center justify-center text-accent font-bold text-lg font-[--font-playfair] group-hover:bg-accent group-hover:text-white transition-all">
+                                        <div className="relative flex-shrink-0 hidden sm:block">
+                                            <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-accent/10 border-2 border-accent flex items-center justify-center text-accent font-bold text-sm md:text-lg font-[--font-playfair] group-hover:bg-accent group-hover:text-white transition-all">
                                                 {String(index + 1).padStart(2, "0")}
                                             </div>
                                         </div>
