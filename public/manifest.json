@@ -1,0 +1,31 @@
+{
+    "name": "Sreyansu Sekhar Mohanty - Portfolio",
+    "short_name": "Sreyansu",
+    "description": "Full Stack Developer Portfolio - Sreyansu Sekhar Mohanty",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0a0a0a",
+    "theme_color": "#d946ef",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ],
+    "categories": [
+        "portfolio",
+        "technology",
+        "development"
+    ],
+    "lang": "en",
+    "dir": "ltr"
+}
